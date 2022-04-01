@@ -13,26 +13,18 @@ class Console
       puts "*".light_white * WIDTH
 
       Player.update_maki_points(players)
-      print_plates(players)
+      print_plates_from_all_rounds(players)
       print_plate_scores(players)
     end
 
     def print_plate_scores(players)
       players.size.times do |player_number|
-        print "Maki: +#{players[player_number].maki_points}".ljust(15).red
-      end
-      puts ""
-      players.size.times do |player_number|
-        print "Pudding: +#{players[player_number].pudding_score}".ljust(15).blue
-      end
-      puts ""
-      players.size.times do |player_number|
-        print "Score: #{players[player_number].plate_value}".ljust(15).green
+        print "Score: #{players[player_number].total_value_of_all_plates}".ljust(15).green
       end
       puts "\n\n"
     end
 
-    def print_plates(players)
+    def print_plates(players, current_round)
       puts "\n*****************".red
       puts "* Player Plates *".red
       puts "*****************\n".red
@@ -56,12 +48,57 @@ class Console
       end
       print "\n"
 
-      # Player player contents
-      players[0].plate.size.times do |plate_item|
+      # Player plate contents
+      players[0].plate[current_round - 1].size.times do |plate_item|
         players.size.times do |player_number|
-          print "#{players[player_number].plate[plate_item].name}".ljust(15, ' ').cyan
+          print "#{players[player_number].plate[current_round - 1][plate_item].name}".ljust(15, ' ').cyan
         end
         print "\n"
+      end
+      print "\n"
+    end
+
+    def print_plates_from_all_rounds(players)
+      puts "\n*****************".red
+      puts "* Player Plates *".red
+      puts "*****************\n".red
+
+      # Player Nametags
+      players.size.times do |player_number|
+        print "************   ".yellow
+      end
+      print "\n"
+      # require 'pry'; binding.pry;
+      players.size.times do |player_number|
+        print "*   (#{players[player_number].puddings})    *   ".yellow
+      end
+      print "\n"
+      players.size.times do |player_number|
+        print "* Player #{player_number + 1} *   ".yellow
+      end
+      print "\n"
+      players.size.times do |player_number|
+        print "************   ".yellow
+      end
+      print "\n"
+
+      # Player plate contents
+      players[0].plate.size.times do |plate_number|
+      
+        players[0].plate[plate_number].size.times do |plate_item|
+          
+          players.size.times do |player_number|
+            print "#{players[player_number].plate[plate_number][plate_item].name}".ljust(15, ' ').cyan
+          end
+          print "\n"
+        
+        end
+        players.size.times do |player_number|
+          print "Score: #{players[player_number].plate_value(plate_number)}".ljust(15, ' ').green
+        end
+        print "\n"
+        print "\n"
+      
       end
       print "\n"
     end
@@ -75,6 +112,18 @@ class Console
         puts "[#{card_number}]".green + card
         card_number += 1
       end
+    end
+
+    def print_round_number(current_round)
+      puts "***********".blue
+      puts "* Round #{current_round} *".blue
+      puts "***********".blue
+    end
+    
+    def print_new_round
+      puts "*********************".green
+      puts "* NEW ROUND STARTED *".green
+      puts "*********************".green
     end
 
     def welcome_message

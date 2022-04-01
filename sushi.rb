@@ -5,9 +5,6 @@ require_relative 'player.rb'
 
 require 'colorize'
 
-CLOCKWISE = true
-COUNTER_CLOCKWISE = false
-
 # Determines when the game is over and to exit the main loop
 game_over = false
 
@@ -38,51 +35,75 @@ total_players.times do |p|
   players[p] = Player.new
 end
 
-# Deal cards to the players
-deck.deal_cards(players)
+# Initialize the round counters
+prev_round = 0
+current_round = 1
+
+# Initialize the card passing direction
+going_clockwise = true
 
 # Main loop
 while(!game_over)
-  # Clear the screen of any previous turn garbage
-  Console.clear_screen
+  while(current_round <= 3)
 
-  # Print a display of players current plates
-  Console.print_plates(players)
+    # Clear the screen of any previous turn garbage
+    Console.clear_screen
 
-  # Print a display of the users hand
-  Console.print_my_hand(players[0].current_hand)
+    if(current_round != prev_round)
+      # Deal more cards to the players
+      deck.deal_cards(players)
 
-  # Card the user will play from their hand
-  card_to_play = 0
+      # Notify of a new round beginning
+      Console.print_new_round
+
+      # Toggle the direction which hands go
+      going_clockwise = !going_clockwise
+    end
   
-  # Get input from the user on which card they want to play
-  while(card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size)
-    puts "\nWhich card would you like to play?".blue
-    print ">".blue
-    card_to_play = gets.chomp.to_i
-    if card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size
-      puts "⛔️ Invalid selection ⛔️".red
+
+    # Print the current round number
+    Console.print_round_number(current_round)
+    
+    # Print a display of players current plates
+    Console.print_plates(players, current_round)
+    
+    # Print a display of the users hand
+    Console.print_my_hand(players[0].current_hand)
+    
+    # Card the user will play from their hand
+    card_to_play = 0
+    
+    # Get input from the user on which card they want to play
+    while(card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size)
+      puts "\nWhich card would you like to play?".blue
+      print ">".blue
+      card_to_play = gets.chomp.to_i
+      if card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size
+        puts "⛔️ Invalid selection ⛔️".red
+      end
+    end
+    
+    # Move the selected card from your hand to your plate
+    players[0].plate[current_round - 1] << players[0].hand.delete_at(card_to_play - 1)
+    
+    # Have the computers select a random card to play
+    players.size.times do |player_number|
+      next if player_number == 0
+      num_of_cards = players[player_number].hand.size
+      players[player_number].plate[current_round - 1] << players[player_number].hand.delete_at(rand(0..num_of_cards - 1))
+    end
+    
+    # Trade hands with all the players
+    Player.rotate_hands(players, going_clockwise)
+
+    prev_round = current_round
+    if(players[0].hand.size <= 0)
+      # Update players
+      Player.update_players(players, current_round)
+      
+      current_round += 1 
     end
   end
-
-  # Move the selected card from your hand to your plate
-  players[0].plate << players[0].hand.delete_at(card_to_play - 1)
-
-  # Have the computers select a random card to play
-  players.size.times do |player_number|
-    next if player_number == 0
-    num_of_cards = players[player_number].hand.size
-    players[player_number].plate << players[player_number].hand.delete_at(rand(0..num_of_cards - 1))
-  end
-    
-  # Trade hands with all the players
-  Player.rotate_hands(players, COUNTER_CLOCKWISE)
-
-  # Update players
-  Player.update_players(players)
-
-  # [TEMP] End the game once the play runs out of cards. (This will just be the end of the round)
-  game_over = true if(players[0].hand.size <= 0)
+  game_over = true 
 end
-
 Console.end_of_game_recap(players)

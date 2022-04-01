@@ -18,15 +18,15 @@ class Player
   }
 
   def initialize
-    self.plate = []
+    self.plate = [[],[],[]]
     self.hand  = []
     self.puddings = 0
     self.pudding_score = 0
-    self.maki_points = 0
-    self.maki_rolls = 0
+    self.maki_points = []
+    self.maki_rolls = []
   end
 
-  def plate_value
+  def plate_value(plate_number)
     value = 0
     tempura_count   = 0
     sashimi_count   = 0
@@ -34,7 +34,7 @@ class Player
     wasabi_count    = 0
     maki_roll_count = 0
 
-    plate.each do |card|
+    plate[plate_number].each do |card|
       if card.name.include?("Nigiri")
         if wasabi_count > 0
           value += card.value * 3
@@ -53,18 +53,27 @@ class Player
       elsif card.name.include?("Maki")
         maki_roll_count += 1
       end
-
     end
     
     value += TEMPURA_POINTS  * (tempura_count / TEMPURA_NEEDED)
     value += SASHIMI_POINTS * (sashimi_count / SASHIMI_NEEDED)
-    value += maki_points
 
     dumpling_count = 5 if dumpling_count > 5
 
     value += DUMPLING_CHART[dumpling_count]
+    
+    value += maki_points[plate_number] unless maki_points[plate_number].nil?
 
     value
+  end
+
+  def total_value_of_all_plates
+    total_value = 0
+    
+    plate.size.times do |plt|
+      total_value += plate_value(plt)
+    end
+    total_value
   end
 
   def current_plate
@@ -75,57 +84,59 @@ class Player
     hand.map(&:name)
   end
 
-  def self.update_players(players)
+  def self.update_players(players, current_round)
     players.size.times do |player_number|
-      players[player_number].maki_rolls = 0
-      players[player_number].puddings = 0
-      players[player_number].plate.each do |item| 
-        players[player_number].maki_rolls += 1 if item.card_name.include?("Maki(*)")
-        players[player_number].maki_rolls += 2 if item.card_name.include?("Maki(**)")
-        players[player_number].maki_rolls += 3 if item.card_name.include?("Maki(***)")
+      players[player_number].maki_rolls[current_round -1] = 0
+      players[player_number].plate[current_round - 1].each do |item| 
+        players[player_number].maki_rolls[current_round -1] += 1 if item.card_name.include?("Maki(*)")
+        players[player_number].maki_rolls[current_round -1] += 2 if item.card_name.include?("Maki(**)")
+        players[player_number].maki_rolls[current_round -1] += 3 if item.card_name.include?("Maki(***)")
         players[player_number].puddings += 1 if item.card_name.include?("Pudding")
       end
     end
   end
 
   def self.update_maki_points(players)
-    first_place_indices = []
-    first_place_amount = 0
-    second_place_indices = []
-    second_place_amount = 0
-    # Check for first place players
-    players.size.times do |player_number|
-      if(players[player_number].maki_rolls >= first_place_amount && players[player_number].maki_rolls != 0)
-        if(players[player_number].maki_rolls == first_place_amount) 
-          first_place_indices << player_number
-        else
-          first_place_indices = [player_number]
-        end
-        first_place_amount = players[player_number].maki_rolls
-      end
-    end
-    # Check for second place players
-    if(first_place_indices.size == 1)
-      players.size.times do |player_number| 
-        if(players[player_number].maki_rolls >= second_place_amount && !first_place_indices.include?(player_number) && players[player_number].maki_rolls != 0)
-          if(players[player_number].maki_rolls == second_place_amount) 
-            second_place_indices << player_number
+    players[0].plate.size.times do |plate|
+      first_place_indices = []
+      first_place_amount = 0
+      second_place_indices = []
+      second_place_amount = 0
+      
+      # Check for first place players
+      players.size.times do |player_number|
+        if(players[player_number].maki_rolls[plate] >= first_place_amount && players[player_number].maki_rolls[plate] != 0)
+          if(players[player_number].maki_rolls[plate] == first_place_amount) 
+            first_place_indices << player_number
           else
-            second_place_indices = [player_number]
+            first_place_indices = [player_number]
           end
-          second_place_amount = players[player_number].maki_rolls 
+          first_place_amount = players[player_number].maki_rolls[plate]
         end
       end
-    end
-
-    # Award points for first place winners
-    first_place_indices.each do |index|
-      players[index].maki_points = FIRST_PLACE_MAKI_POINTS / first_place_indices.size
-    end
-
-    # Award points for second place winners (Award 1 point minimum in the case of a 4+ way tie)
-    second_place_indices.each do |index|
-      players[index].maki_points = SECOND_PLACE_MAKI_POINTS / second_place_indices.size > 1 ? SECOND_PLACE_MAKI_POINTS / second_place_indices.size : 1
+      # Check for second place players
+      if(first_place_indices.size == 1)
+        players.size.times do |player_number| 
+          if(players[player_number].maki_rolls[plate] >= second_place_amount && !first_place_indices.include?(player_number) && players[player_number].maki_rolls[plate] != 0)
+            if(players[player_number].maki_rolls[plate] == second_place_amount) 
+              second_place_indices << player_number
+            else
+              second_place_indices = [player_number]
+            end
+            second_place_amount = players[player_number].maki_rolls[plate]
+          end
+        end
+      end
+      
+      # Award points for first place winners
+      first_place_indices.each do |index|
+        players[index].maki_points[plate] = FIRST_PLACE_MAKI_POINTS / first_place_indices.size
+      end
+      
+      # Award points for second place winners (Award 1 point minimum in the case of a 4+ way tie)
+      second_place_indices.each do |index|
+        players[index].maki_points[plate] = SECOND_PLACE_MAKI_POINTS / second_place_indices.size > 1 ? SECOND_PLACE_MAKI_POINTS / second_place_indices.size : 1
+      end
     end
   end
 
