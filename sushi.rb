@@ -47,10 +47,10 @@ while(!game_over)
   Console.clear_screen
 
   # Print a display of players current plates
-  Player.print_plates(players)
+  Console.print_plates(players)
 
   # Print a display of the users hand
-  players[0].print_my_hand
+  Console.print_my_hand(players[0].current_hand)
 
   # Card the user will play from their hand
   card_to_play = 0
@@ -85,4 +85,4 @@ while(!game_over)
   game_over = true if(players[0].hand.size <= 0)
 end
 
-Player.end_of_game_recap(players)
+Console.end_of_game_recap(players)
