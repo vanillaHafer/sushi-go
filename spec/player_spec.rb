@@ -193,4 +193,126 @@ RSpec.describe Player do
         .to(2)
     end
   end
+
+  describe "#current_hand" do
+    let(:player) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Pudding"),
+          Card.new(card_name: "Wasabi"),
+          Card.new(card_name: "Squid Nigiri"),
+          Card.new(card_name: "Maki", maki_value: 3)
+        ]
+      end
+    end
+
+    it "returns the card names" do
+      expect(player.current_hand).to eq([
+        "Pudding",
+        "Wasabi",
+        "Squid Nigiri",
+        "Maki (***)"
+      ])
+    end
+  end
+
+  describe ".rotate_hands" do
+    let(:player_1) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Pudding"),
+          Card.new(card_name: "Wasabi")
+        ]
+      end
+    end
+
+    let(:player_2) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Squid Nigiri"),
+          Card.new(card_name: "Maki", maki_value: 3)
+        ]
+      end
+    end
+
+    let(:player_3) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Maki", maki_value: 1),
+          Card.new(card_name: "Pudding")
+        ]
+      end
+    end
+
+    let(:player_4) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Chopsticks"),
+          Card.new(card_name: "Wasabi")
+        ]
+      end
+    end
+    let(:players) {
+      [
+        player_1,
+        player_2,
+        player_3,
+        player_4
+      ]
+    }
+
+    def rotate
+      Player.rotate_hands(players, clockwise)
+    end
+
+    context "when counter-clockwise" do
+      let(:clockwise) { false }
+
+      it "gives player 1 hand to player 2" do
+        p2_hand = player_2.hand
+
+        expect { rotate }.to change { player_1.hand }.to(p2_hand)
+      end
+
+      it "gives player 2 hand to player 3" do
+        p3_hand = player_3.hand
+        expect { rotate }.to change { player_2.hand }.to(p3_hand)
+      end
+
+      it "gives player 3 hand to player 4" do
+        p4_hand = player_4.hand
+        expect { rotate }.to change { player_3.hand }.to(p4_hand)
+      end
+
+      it "gives player 4 hand to player 1" do
+        p1_hand = player_1.hand
+        expect { rotate }.to change { player_4.hand }.to(p1_hand)
+      end
+    end
+
+    context "when clockwise" do
+      let(:clockwise) { true }
+
+      it "gives player 1 hand to player 4" do
+        p4_hand = player_4.hand
+
+        expect { rotate }.to change { player_1.hand }.to(p4_hand)
+      end
+
+      it "gives player 2 hand to player 1" do
+        p1_hand = player_1.hand
+        expect { rotate }.to change { player_2.hand }.to(p1_hand)
+      end
+
+      it "gives player 3 hand to player 2" do
+        p2_hand = player_2.hand
+        expect { rotate }.to change { player_3.hand }.to(p2_hand)
+      end
+
+      it "gives player 4 hand to player 3" do
+        p3_hand = player_3.hand
+        expect { rotate }.to change { player_4.hand }.to(p3_hand)
+      end
+    end
+  end
 end
