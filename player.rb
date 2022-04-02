@@ -62,10 +62,9 @@ class Player
   end
 
   def total_value_of_all_plates
-    total_value = plate.each_index.sum do |index|
+    plate.each_index.sum do |index|
       plate_value(index)
     end
-    total_value
   end
 
   def current_hand
@@ -94,8 +93,8 @@ class Player
 
     # Check for first place
     players.size.times do |player_number|
-      if(players[player_number].puddings >= first_place_amount)
-        if(players[player_number].puddings == first_place_amount)
+      if players[player_number].puddings >= first_place_amount
+        if players[player_number].puddings == first_place_amount
           first_place_indices << player_number
         else
           first_place_indices = [player_number]
@@ -106,8 +105,8 @@ class Player
 
     # Check for last place
     players.size.times do |player_number|
-      if(players[player_number].puddings <= last_place_amount)
-        if(players[player_number].puddings == last_place_amount)
+      if players[player_number].puddings <= last_place_amount
+        if players[player_number].puddings == last_place_amount
           last_place_indices << player_number
         else
           last_place_indices = [player_number]
@@ -123,8 +122,6 @@ class Player
     last_place_indices.each do |index|
       players[index].pudding_score = -(6 / last_place_indices.size)
     end
-
-
   end
 
   def self.update_maki_points(players)
@@ -180,7 +177,7 @@ class Player
   def self.rotate_hands(players, clockwise = true)
     hands = players.map(&:hand)
     count = clockwise ? players.length - 1 : 1
-    count.times { hands.rotate! }
+    hands.rotate!(count)
 
     players.each_index { |i| players[i].hand = hands[i] }
   end
