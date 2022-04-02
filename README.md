@@ -11,6 +11,5 @@ ruby sushi.rb
 
 
 ```
-bundle
-rspec
+rake
 ```
