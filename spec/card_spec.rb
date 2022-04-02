@@ -73,4 +73,22 @@ RSpec.describe Card do
       end
     end
   end
+
+  describe "#pudding?" do
+    context "when name starts with 'Pudding'" do
+      let(:card) { described_class.new(card_name: "Pudding") }
+
+      it "is true" do
+        expect(card).to be_pudding
+      end
+    end
+
+    context "when name does not start with 'Pudding'" do
+      let(:card) { described_class.new(card_name: "Not Pudding") }
+
+      it "is false" do
+        expect(card).not_to be_pudding
+      end
+    end
+  end
 end

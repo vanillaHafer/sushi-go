@@ -90,7 +90,7 @@ class Player
           players[player_number].maki_rolls[round_idx] += card.maki_value
         end
 
-        players[player_number].puddings += 1 if card.name.include?("Pudding")
+        players[player_number].puddings += 1 if card.pudding?
       end
     end
   end
