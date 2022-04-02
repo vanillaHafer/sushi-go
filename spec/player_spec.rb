@@ -153,4 +153,29 @@ RSpec.describe Player do
       expect(player.total_value_of_all_plates).to eq(18)
     end
   end
+
+  describe ".update_players" do
+    let(:player_1) do
+      Player.new
+    end
+    let(:player_2) do
+      Player.new
+    end
+    let(:players) { [player_1, player_2] }
+    let(:round) { 1 }
+
+    it "adds the maki rolls for the round" do
+      player_1.plate[round - 1] = [
+        Card.new(card_name: "Maki", maki_value: 1),
+        Card.new(card_name: "Maki", maki_value: 2)
+      ]
+
+      expect {
+        Player.update_players(players, round)
+      }.to change {
+        player_1.maki_rolls[round - 1]
+      }.from(nil)
+        .to(3)
+    end
+  end
 end
