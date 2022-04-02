@@ -52,6 +52,12 @@ RSpec.describe Card do
     end
   end
 
+  describe "#nigiri?" do
+    it "is true when name has Nigiri" do
+      expect(Card.new(card_name: "Egg Nigiri")).to be_nigiri
+    end
+  end
+
   {
     wasabi?: "Wasabi",
     egg_nigiri?: "Egg Nigiri",
