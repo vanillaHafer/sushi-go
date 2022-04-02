@@ -5,7 +5,7 @@ RSpec.describe Console do
     og = $stdout
     Tempfile.create("out") do |tmp|
       $stdout = tmp
-      yield if block_given?
+      yield
       tmp.rewind
       tmp.read
     end

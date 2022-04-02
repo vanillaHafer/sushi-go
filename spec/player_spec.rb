@@ -193,4 +193,353 @@ RSpec.describe Player do
         .to(2)
     end
   end
+
+  describe "#current_hand" do
+    let(:player) do
+      Player.new.tap do |player|
+        player.hand = [
+          Card.new(card_name: "Pudding"),
+          Card.new(card_name: "Wasabi"),
+          Card.new(card_name: "Squid Nigiri"),
+          Card.new(card_name: "Maki", maki_value: 3)
+        ]
+      end
+    end
+
+    it "returns the card names" do
+      expect(player.current_hand).to eq([
+        "Pudding",
+        "Wasabi",
+        "Squid Nigiri",
+        "Maki (***)"
+      ])
+    end
+  end
+
+  describe ".rotate_hands" do
+    let(:player_1) do
+      create(:player, hand: [
+        Card.new(card_name: "Pudding"),
+        Card.new(card_name: "Wasabi")
+      ])
+    end
+
+    let(:player_2) do
+      create(:player, hand: [
+        Card.new(card_name: "Squid Nigiri"),
+        Card.new(card_name: "Maki", maki_value: 3)
+      ])
+    end
+
+    let(:player_3) do
+      create(:player, hand: [
+        Card.new(card_name: "Maki", maki_value: 1),
+        Card.new(card_name: "Pudding")
+      ])
+    end
+
+    let(:player_4) do
+      create(:player, hand: [
+        Card.new(card_name: "Chopsticks"),
+        Card.new(card_name: "Wasabi")
+      ])
+    end
+    let(:players) {
+      [
+        player_1,
+        player_2,
+        player_3,
+        player_4
+      ]
+    }
+
+    def rotate
+      Player.rotate_hands(players, clockwise)
+    end
+
+    context "when counter-clockwise" do
+      let(:clockwise) { false }
+
+      it "gives player 1 hand to player 2" do
+        p2_hand = player_2.hand
+
+        expect { rotate }.to change { player_1.hand }.to(p2_hand)
+      end
+
+      it "gives player 2 hand to player 3" do
+        p3_hand = player_3.hand
+        expect { rotate }.to change { player_2.hand }.to(p3_hand)
+      end
+
+      it "gives player 3 hand to player 4" do
+        p4_hand = player_4.hand
+        expect { rotate }.to change { player_3.hand }.to(p4_hand)
+      end
+
+      it "gives player 4 hand to player 1" do
+        p1_hand = player_1.hand
+        expect { rotate }.to change { player_4.hand }.to(p1_hand)
+      end
+    end
+
+    context "when clockwise" do
+      let(:clockwise) { true }
+
+      it "gives player 1 hand to player 4" do
+        p4_hand = player_4.hand
+
+        expect { rotate }.to change { player_1.hand }.to(p4_hand)
+      end
+
+      it "gives player 2 hand to player 1" do
+        p1_hand = player_1.hand
+        expect { rotate }.to change { player_2.hand }.to(p1_hand)
+      end
+
+      it "gives player 3 hand to player 2" do
+        p2_hand = player_2.hand
+        expect { rotate }.to change { player_3.hand }.to(p2_hand)
+      end
+
+      it "gives player 4 hand to player 3" do
+        p3_hand = player_3.hand
+        expect { rotate }.to change { player_4.hand }.to(p3_hand)
+      end
+    end
+  end
+
+  describe "#update_maki_points" do
+    context "when there is one first place winner" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_1),
+          create(:player, :maki_1),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "awards 6 points" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          players.first.maki_points[0]
+        }.from(nil)
+          .to(6)
+      end
+
+      it "awards 3 points to second" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          players.last.maki_points[0]
+        }.from(nil)
+          .to(3)
+      end
+    end
+
+    context "when there is two-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_1),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 1 point" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil])
+          .to([1, 1])
+      end
+    end
+
+    context "when there is three-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 1 point" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[1].maki_points[0],
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil, nil])
+          .to([1, 1, 1])
+      end
+    end
+
+    context "when there is a four-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 0 points" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[1].maki_points[0],
+            players[2].maki_points[0],
+            players[3].maki_points[0],
+            players[4].maki_points[0]
+          ]
+        }.from([nil, nil, nil, nil])
+          .to([0, 0, 0, 0])
+      end
+    end
+
+    context "when there are two first place winners" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "awards 3 points to each one" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[0].maki_points[0],
+            players[1].maki_points[0]
+          ]
+        }.from([nil, nil])
+          .to([3, 3])
+      end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil])
+      end
+    end
+
+    context "when there are three first place winners" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "awards 2 points to each one" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[0].maki_points[0],
+            players[1].maki_points[0],
+            players[2].maki_points[0]
+          ]
+        }.from([nil, nil, nil])
+          .to([2, 2, 2])
+      end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[3].maki_points[0]
+          ]
+        }.from([nil])
+      end
+    end
+
+    context "when there are four first place winners" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_1)
+        ]
+      end
+
+      it "awards 1 point to each one" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          players.map { |pl| pl.maki_points[0] }
+        }.from([nil, nil, nil, nil, nil])
+          .to([1, 1, 1, 1, nil])
+      end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[4].maki_points[0]
+          ]
+        }.from([nil])
+      end
+    end
+
+    context "when there are five first place winners" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_3),
+          create(:player, :maki_1)
+        ]
+      end
+
+      it "awards 1 point to each one" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          players.map { |pl| pl.maki_points[0] }
+        }.from([nil, nil, nil, nil, nil, nil])
+          .to([1, 1, 1, 1, 1, nil])
+      end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[5].maki_points[0]
+          ]
+        }.from([nil])
+      end
+    end
+  end
 end
