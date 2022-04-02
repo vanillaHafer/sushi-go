@@ -1,5 +1,4 @@
-require "./card"
-require "./deck"
+require "spec_helper"
 
 RSpec.describe Deck do
   describe "#new" do
