@@ -1,5 +1,12 @@
 require "simplecov"
-SimpleCov.start
+
+SimpleCov.start do
+  enable_coverage :branch
+
+  %w[console.rb].each do |skip|
+    add_filter skip
+  end
+end
 
 require "tempfile"
 require "colorize"
