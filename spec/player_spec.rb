@@ -46,6 +46,44 @@ RSpec.describe Player do
       end
     end
 
+    context "Wasabi" do
+      context "when wasabi is present, but no nigiri" do
+        let(:plate) do
+          [[Card.new(card_name: "Wasabi")]]
+        end
+
+        it "has no points" do
+          expect(points).to eq(0)
+        end
+      end
+
+      context "when wasabi is present, but played after nigiri" do
+        let(:plate) do
+          [[
+            Card.new(card_name: "Nigiri", value: 5),
+            Card.new(card_name: "Wasabi")
+          ]]
+        end
+
+        it "has the points of the nigiri" do
+          expect(points).to eq(5)
+        end
+      end
+
+      context "when wasabi is present, and played before nigiri" do
+        let(:plate) do
+          [[
+            Card.new(card_name: "Wasabi"),
+            Card.new(card_name: "Nigiri", value: 5)
+          ]]
+        end
+
+        it "multiplies the card value by 3" do
+          expect(points).to eq(15)
+        end
+      end
+    end
+
     context "with 2 tempura" do
       let(:plate) do
         [2.times.map { Card.new(card_name: "Tempura") }]
