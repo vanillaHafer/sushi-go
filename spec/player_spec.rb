@@ -30,4 +30,50 @@ RSpec.describe Player do
       end
     end
   end
+
+  describe "#plate_value" do
+    let(:plate) { [[]] }
+    let(:player) { Player.new.tap { |p| p.plate = plate } }
+    let(:points) { player.plate_value(0) }
+
+    context "with 1 tempura" do
+      let(:plate) do
+        [[Card.new(card_name: "Tempura")]]
+      end
+
+      it "has no points" do
+        expect(points).to eq(0)
+      end
+    end
+
+    context "with 2 tempura" do
+      let(:plate) do
+        [2.times.map { Card.new(card_name: "Tempura") }]
+      end
+
+      it "has no points" do
+        expect(points).to eq(5)
+      end
+    end
+
+    context "with 2 sashimi" do
+      let(:plate) do
+        [2.times.map { Card.new(card_name: "Sashimi") }]
+      end
+
+      it "has no points" do
+        expect(points).to eq(0)
+      end
+    end
+
+    context "with 3 shashimi" do
+      let(:plate) do
+        [3.times.map { Card.new(card_name: "Sashimi") }]
+      end
+
+      it "has no points" do
+        expect(points).to eq(10)
+      end
+    end
+  end
 end
