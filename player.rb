@@ -28,11 +28,10 @@ class Player
 
   def plate_value(plate_number)
     value = 0
-    tempura_count   = 0
-    sashimi_count   = 0
-    dumpling_count  = 0
-    wasabi_count    = 0
-    maki_roll_count = 0
+    tempura_count = 0
+    sashimi_count = 0
+    dumpling_count = 0
+    wasabi_count = 0
 
     plate[plate_number].each do |card|
       if card.nigiri?
@@ -50,21 +49,16 @@ class Player
         dumpling_count += 1
       elsif card.wasabi?
         wasabi_count += 1
-      elsif card.maki?
-        maki_roll_count += 1
       end
-    end 
-    
-    value += TEMPURA_POINTS  * (tempura_count / TEMPURA_NEEDED)
+    end
+
+    value += maki_points[plate_number] unless maki_points[plate_number].nil?
+
+    value += TEMPURA_POINTS * (tempura_count / TEMPURA_NEEDED)
     value += SASHIMI_POINTS * (sashimi_count / SASHIMI_NEEDED)
 
     dumpling_count = [5, dumpling_count].min
-
     value += DUMPLING_CHART[dumpling_count]
-    
-    value += maki_points[plate_number] unless maki_points[plate_number].nil?
-
-    value
   end
 
   def total_value_of_all_plates

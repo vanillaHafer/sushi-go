@@ -73,7 +73,7 @@ while(!game_over)
   while(current_round <= 3)
 
     # Clear the screen of any previous turn garbage
-    Console.clear_screen
+    IO.console.clear_screen
 
     if(current_round != prev_round)
       # Deal more cards to the players
