@@ -7,11 +7,11 @@ class Card
     @maki_value = maki_value
   end
 
-  def name 
+  def name
     if self.class.to_s.include?("Maki")
-      "Maki(#{"*" * self.maki_value})"
+      "Maki(#{"*" * maki_value})"
     else
-      self.card_name
+      card_name
     end
   end
 end
