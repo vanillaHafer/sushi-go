@@ -58,7 +58,7 @@ class Player
     value += TEMPURA_POINTS  * (tempura_count / TEMPURA_NEEDED)
     value += SASHIMI_POINTS * (sashimi_count / SASHIMI_NEEDED)
 
-    dumpling_count = 5 if dumpling_count > 5
+    dumpling_count = [5, dumpling_count].min
 
     value += DUMPLING_CHART[dumpling_count]
     
