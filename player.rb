@@ -58,7 +58,7 @@ class Player
     value += TEMPURA_POINTS  * (tempura_count / TEMPURA_NEEDED)
     value += SASHIMI_POINTS * (sashimi_count / SASHIMI_NEEDED)
 
-    dumpling_count = 5 if dumpling_count > 5
+    dumpling_count = [5, dumpling_count].min
 
     value += DUMPLING_CHART[dumpling_count]
     
@@ -68,12 +68,9 @@ class Player
   end
 
   def total_value_of_all_plates
-    total_value = 0
-    
-    plate.size.times do |plt|
-      total_value += plate_value(plt)
+    plate.each_index.sum do |index|
+      plate_value(index)
     end
-    total_value
   end
 
   def current_plate
