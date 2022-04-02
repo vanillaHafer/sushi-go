@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.1"
 
 gem "colorize", "~> 0.8.1"
+gem "factory_bot", "~> 6.2"
 gem "pry", "~> 0.14.1"
 gem "rspec", "~> 3.11"
 gem "simplecov", "~> 0.21.2"
