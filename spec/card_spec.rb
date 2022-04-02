@@ -52,42 +52,25 @@ RSpec.describe Card do
     end
   end
 
-  describe "#maki?" do
-    context "when name starts with 'Maki'" do
-      let(:card) do
-        described_class.new(card_name: "Maki", maki_value: 6)
+  {
+    wasabi?: "Wasabi",
+    egg_nigiri?: "Egg Nigiri",
+    salmon_nigiri?: "Salmon Nigiri",
+    squid_nigiri?: "Squid Nigiri",
+    tempura?: "Tempura",
+    sashimi?: "Sashimi",
+    dumpling?: "Dumpling",
+    maki?: "Maki (***)",
+    pudding?: "Pudding",
+    chopsticks?: "Chopsticks"
+  }.each do |method, card_name|
+    describe "##{method}" do
+      it "is true when name is #{card_name}" do
+        expect(Card.new(card_name:).public_send(method)).to eq(true)
       end
 
-      it "is true" do
-        expect(card).to be_maki
-      end
-    end
-
-    context "when name does not start with 'Maki'" do
-      let(:card) do
-        described_class.new(card_name: "Egg Nigiri", maki_value: 6)
-      end
-
-      it "is false" do
-        expect(card).not_to be_maki
-      end
-    end
-  end
-
-  describe "#pudding?" do
-    context "when name starts with 'Pudding'" do
-      let(:card) { described_class.new(card_name: "Pudding") }
-
-      it "is true" do
-        expect(card).to be_pudding
-      end
-    end
-
-    context "when name does not start with 'Pudding'" do
-      let(:card) { described_class.new(card_name: "Not Pudding") }
-
-      it "is false" do
-        expect(card).not_to be_pudding
+      it "is false when name is 'Not #{card_name}'" do
+        expect(Card.new(card_name: "Not #{card_name}").public_send(method)).to eq(false)
       end
     end
   end
