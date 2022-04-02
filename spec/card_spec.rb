@@ -19,6 +19,26 @@ RSpec.describe Card do
     it "has a default maki_value of 0" do
       expect(card.maki_value).to eq(0)
     end
+
+    context "without a name of Maki and a maki value > 0" do
+      let(:card) do
+        described_class.new(card_name: "Sushimi", maki_value: 6)
+      end
+
+      it "does not change the name" do
+        expect(card.name).to eq("Sushimi")
+      end
+    end
+
+    context "with a name of Maki and a maki value > 0" do
+      let(:card) do
+        described_class.new(card_name: "Maki", maki_value: 6)
+      end
+
+      it "appends * to the name" do
+        expect(card.name).to eq("Maki (******)")
+      end
+    end
   end
 
   describe "#name" do
@@ -29,6 +49,28 @@ RSpec.describe Card do
 
     it "returns the card_name" do
       expect(card.name).to eq("寿司")
+    end
+  end
+
+  describe "#maki?" do
+    context "when name starts with 'Maki'" do
+      let(:card) do
+        described_class.new(card_name: "Maki", maki_value: 6)
+      end
+
+      it "is true" do
+        expect(card).to be_maki
+      end
+    end
+
+    context "when name does not start with 'Maki'" do
+      let(:card) do
+        described_class.new(card_name: "Egg Nigiri", maki_value: 6)
+      end
+
+      it "is false" do
+        expect(card).not_to be_maki
+      end
     end
   end
 end

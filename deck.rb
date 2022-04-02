@@ -33,9 +33,9 @@ class Deck
     CARD_COUNT[:tempura].times { cards << Card.new(card_name: "Tempura") }
     CARD_COUNT[:sashimi].times { cards << Card.new(card_name: "Sashimi") }
     CARD_COUNT[:dumpling].times { cards << Card.new(card_name: "Dumpling") }
-    CARD_COUNT[:maki_1].times { cards << Card.new(card_name: "Maki(*)", maki_value: 1) }
-    CARD_COUNT[:maki_2].times { cards << Card.new(card_name: "Maki(**)", maki_value: 2) }
-    CARD_COUNT[:maki_3].times { cards << Card.new(card_name: "Maki(***)", maki_value: 3) }
+    CARD_COUNT[:maki_1].times { cards << Card.new(card_name: "Maki", maki_value: 1) }
+    CARD_COUNT[:maki_2].times { cards << Card.new(card_name: "Maki", maki_value: 2) }
+    CARD_COUNT[:maki_3].times { cards << Card.new(card_name: "Maki", maki_value: 3) }
     CARD_COUNT[:pudding].times { cards << Card.new(card_name: "Pudding") }
     CARD_COUNT[:chopsticks].times { cards << Card.new(card_name: "Chopsticks") }
 

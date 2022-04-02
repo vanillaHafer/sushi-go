@@ -17,9 +17,6 @@ RSpec.describe Deck do
 
   describe "#deal_cards" do
     let(:deck) { described_class.new }
-    let(:players) {
-      [Player.new, Player.new]
-    }
 
     context "empty cards" do
       described_class::HAND_SIZE.each do |k, v|

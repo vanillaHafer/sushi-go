@@ -85,9 +85,9 @@ class Player
     players.size.times do |player_number|
       players[player_number].maki_rolls[current_round -1] = 0
       players[player_number].plate[current_round - 1].each do |item| 
-        players[player_number].maki_rolls[current_round -1] += 1 if item.card_name.include?("Maki(*)")
-        players[player_number].maki_rolls[current_round -1] += 2 if item.card_name.include?("Maki(**)")
-        players[player_number].maki_rolls[current_round -1] += 3 if item.card_name.include?("Maki(***)")
+        players[player_number].maki_rolls[current_round -1] += 1 if item.card_name.include?("Maki (*)")
+        players[player_number].maki_rolls[current_round -1] += 2 if item.card_name.include?("Maki (**)")
+        players[player_number].maki_rolls[current_round -1] += 3 if item.card_name.include?("Maki (***)")
         players[player_number].puddings += 1 if item.card_name.include?("Pudding")
       end
     end
