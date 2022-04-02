@@ -33,6 +33,12 @@ RSpec.describe Deck do
               -(k * v)
             )
           end
+
+          it "adds #{v} cards to each player's hand" do
+            players = k.times.map { Player.new }
+            deck.deal_cards(players)
+            expect(players.all? { |p| p.hand.length == v }).to eq(true)
+          end
         end
       end
     end
