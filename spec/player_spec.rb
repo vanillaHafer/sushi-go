@@ -75,5 +75,29 @@ RSpec.describe Player do
         expect(points).to eq(10)
       end
     end
+
+    context "dumplings" do
+      context "dumpling limit" do
+        let(:plate) do
+          [10.times.map { Card.new(card_name: "Dumpling") }]
+        end
+
+        it "caps the points at 5" do
+          expect(points).to eq(15)
+        end
+      end
+
+      described_class::DUMPLING_CHART.each do |k, v|
+        context "scoring" do
+          let(:plate) do
+            [k.times.map { Card.new(card_name: "Dumpling") }]
+          end
+
+          it "awards #{v} points for #{k} cards" do
+            expect(points).to eq(v)
+          end
+        end
+      end
+    end
   end
 end
