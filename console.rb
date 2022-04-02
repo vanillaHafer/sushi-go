@@ -1,13 +1,11 @@
+require "io/console"
+
 class Console
   class << self
     WIDTH = 22
 
-    def clear_screen
-      puts "\n" * 50
-    end
-
     def end_of_game_recap(players)
-      clear_screen
+      IO.console.clear_screen
       puts "*".light_white * WIDTH
       puts "* THANKS FOR PLAYING *".light_white
       puts "*".light_white * WIDTH
@@ -127,7 +125,7 @@ class Console
     end
 
     def welcome_message
-      clear_screen
+      IO.console.clear_screen
       print "
       __        __   _                            _        
       \\ \\      / /__| | ___ ___  _ __ ___   ___  | |_ ___  
