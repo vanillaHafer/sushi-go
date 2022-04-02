@@ -172,26 +172,10 @@ class Player
   end
 
   def self.rotate_hands(players, clockwise = true)
-    last_player_index = players.size - 1
+    hands = players.map(&:hand)
+    count = clockwise ? players.length - 1 : 1
+    count.times { hands.rotate! }
 
-    if clockwise
-      temp_hand = players[last_player_index].hand
-      players.size.times do |player_number|
-        if player_number != last_player_index
-          players[last_player_index - player_number].hand = players[(last_player_index - 1) - player_number].hand
-        else
-          players[0].hand = temp_hand
-        end
-      end
-    else
-      temp_hand = players[0].hand
-      players.size.times do |player_number|
-        if player_number != last_player_index
-          players[player_number].hand = players[player_number + 1].hand
-        else
-          players[last_player_index].hand = temp_hand
-        end
-      end
-    end
+    players.each_index { |i| players[i].hand = hands[i] }
   end
 end
