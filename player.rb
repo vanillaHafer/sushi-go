@@ -68,12 +68,9 @@ class Player
   end
 
   def total_value_of_all_plates
-    total_value = 0
-    
-    plate.size.times do |plt|
-      total_value += plate_value(plt)
+    plate.each_index.sum do |index|
+      plate_value(index)
     end
-    total_value
   end
 
   def current_plate
