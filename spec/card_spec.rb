@@ -24,17 +24,10 @@ RSpec.describe Card do
   describe "#name" do
     let(:card_name) { "寿司" }
     let(:card) do
-      described_class.new(card_name:, maki_value: 3)
+      described_class.new(card_name:)
     end
 
-    context "when the name includes 'Maki'" do
-      let(:card_name) { "Maki" }
-      it "has a * for each maki value" do
-        expect(card.name).to eq("Maki(***)")
-      end
-    end
-
-    it "returns the card name" do
+    it "returns the card_name" do
       expect(card.name).to eq("寿司")
     end
   end
