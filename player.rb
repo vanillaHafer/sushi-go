@@ -18,8 +18,8 @@ class Player
   }
 
   def initialize
-    self.plate = [[],[],[]]
-    self.hand  = []
+    self.plate = [[], [], []]
+    self.hand = []
     self.puddings = 0
     self.pudding_score = 0
     self.maki_points = []
@@ -133,11 +133,11 @@ class Player
       first_place_amount = 0
       second_place_indices = []
       second_place_amount = 0
-      
+
       # Check for first place players
       players.size.times do |player_number|
-        if(players[player_number].maki_rolls[plate] >= first_place_amount && players[player_number].maki_rolls[plate] != 0)
-          if(players[player_number].maki_rolls[plate] == first_place_amount) 
+        if players[player_number].maki_rolls[plate] >= first_place_amount && players[player_number].maki_rolls[plate] != 0
+          if players[player_number].maki_rolls[plate] == first_place_amount
             first_place_indices << player_number
           else
             first_place_indices = [player_number]
@@ -146,10 +146,10 @@ class Player
         end
       end
       # Check for second place players
-      if(first_place_indices.size == 1)
-        players.size.times do |player_number| 
-          if(players[player_number].maki_rolls[plate] >= second_place_amount && !first_place_indices.include?(player_number) && players[player_number].maki_rolls[plate] != 0)
-            if(players[player_number].maki_rolls[plate] == second_place_amount) 
+      if first_place_indices.size == 1
+        players.size.times do |player_number|
+          if players[player_number].maki_rolls[plate] >= second_place_amount && !first_place_indices.include?(player_number) && players[player_number].maki_rolls[plate] != 0
+            if players[player_number].maki_rolls[plate] == second_place_amount
               second_place_indices << player_number
             else
               second_place_indices = [player_number]
@@ -158,12 +158,12 @@ class Player
           end
         end
       end
-      
+
       # Award points for first place winners
       first_place_indices.each do |index|
         players[index].maki_points[plate] = FIRST_PLACE_MAKI_POINTS / first_place_indices.size
       end
-      
+
       # Award points for second place winners (Award 1 point minimum in the case of a 4+ way tie)
       second_place_indices.each do |index|
         players[index].maki_points[plate] = SECOND_PLACE_MAKI_POINTS / second_place_indices.size > 1 ? SECOND_PLACE_MAKI_POINTS / second_place_indices.size : 1
