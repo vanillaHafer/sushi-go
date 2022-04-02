@@ -11,13 +11,30 @@ class Console
       puts "*".light_white * WIDTH
 
       Player.update_maki_points(players)
+      Player.update_pudding_score(players)
       print_plates_from_all_rounds(players)
       print_plate_scores(players)
     end
 
     def print_plate_scores(players)
       players.size.times do |player_number|
-        print "Score: #{players[player_number].total_value_of_all_plates}".ljust(15).green
+        print "Score: #{players[player_number].total_value_of_all_plates}".ljust(21).green
+      end
+      puts "\n"
+
+      players.size.times do |player_number|
+        if(players[player_number].pudding_score > 0)
+          print "Pudding: #{players[player_number].pudding_score}".ljust(21).light_green
+        elsif(players[player_number].pudding_score == 0)
+          print "Pudding: #{players[player_number].pudding_score}".ljust(21)
+        elsif(players[player_number].pudding_score < 0)
+          print "Pudding: #{players[player_number].pudding_score}".ljust(21).red
+        end
+      end
+      puts "\n"
+      
+      players.size.times do |player_number|
+        print "FinalScore: #{players[player_number].total_value_of_all_plates + players[player_number].pudding_score}".ljust(21).green.bold
       end
       puts "\n\n"
     end
@@ -29,27 +46,27 @@ class Console
 
       # Player Nametags
       players.size.times do |player_number|
-        print "************   ".yellow
+        print "******************   ".yellow
       end
       print "\n"
       # require 'pry'; binding.pry;
       players.size.times do |player_number|
-        print "*   (#{players[player_number].puddings})    *   ".yellow
+        print "*      (#{players[player_number].puddings})       *   ".yellow
       end
       print "\n"
       players.size.times do |player_number|
-        print "* Player #{player_number + 1} *   ".yellow
+        print "*    Player #{player_number + 1}    *   ".yellow
       end
       print "\n"
       players.size.times do |player_number|
-        print "************   ".yellow
+        print "******************   ".yellow
       end
       print "\n"
 
       # Player plate contents
       players[0].plate[current_round - 1].size.times do |plate_item|
         players.size.times do |player_number|
-          print "#{players[player_number].plate[current_round - 1][plate_item].name}".ljust(15, ' ').cyan
+          print "#{players[player_number].plate[current_round - 1][plate_item].name}".ljust(21).cyan
         end
         print "\n"
       end
@@ -63,20 +80,20 @@ class Console
 
       # Player Nametags
       players.size.times do |player_number|
-        print "************   ".yellow
+        print "******************   ".yellow
       end
       print "\n"
       # require 'pry'; binding.pry;
       players.size.times do |player_number|
-        print "*   (#{players[player_number].puddings})    *   ".yellow
+        print "*      (#{players[player_number].puddings})       *   ".yellow
       end
       print "\n"
       players.size.times do |player_number|
-        print "* Player #{player_number + 1} *   ".yellow
+        print "*    Player #{player_number + 1}    *   ".yellow
       end
       print "\n"
       players.size.times do |player_number|
-        print "************   ".yellow
+        print "******************   ".yellow
       end
       print "\n"
 
@@ -86,13 +103,13 @@ class Console
         players[0].plate[plate_number].size.times do |plate_item|
           
           players.size.times do |player_number|
-            print "#{players[player_number].plate[plate_number][plate_item].name}".ljust(15, ' ').cyan
+            print "#{players[player_number].plate[plate_number][plate_item].name}".ljust(21).cyan
           end
           print "\n"
         
         end
         players.size.times do |player_number|
-          print "Score: #{players[player_number].plate_value(plate_number)}".ljust(15, ' ').green
+          print "Score: #{players[player_number].plate_value(plate_number)}".ljust(21).green
         end
         print "\n"
         print "\n"
