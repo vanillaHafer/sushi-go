@@ -4,6 +4,7 @@ require_relative 'deck.rb'
 require_relative 'player.rb'
 
 require 'colorize'
+require "io/console"
 
 # Determines when the game is over and to exit the main loop
 game_over = false
@@ -17,13 +18,38 @@ Console.welcome_message
 # Total players that will be given by the user
 total_players = 0
 
+class QuitGame < StandardError
+  def self.quit
+    IO.console.clear_screen
+    rows, cols = IO.console.winsize
+    message = "GAME OVER"
+    puts "\n" * (rows / 2 - 1)
+    print " " * ((cols - message.length) / 2)
+    print message
+    print " " * ((cols - message.length) / 2)
+    puts "\n" * (rows / 2)
+    exit(0)
+  end
+end
+%w[SIGINT SIGQUIT].each { |s| trap(s) { QuitGame.quit } }
+
+def get_number(quit: %w[q quit done])
+  input = gets&.chomp
+  raise QuitGame if input.nil? || quit.include?(input)
+  input.to_i
+end
+
 # Get input of how many players are playing
-while total_players < 2 || total_players > 5 do
+while total_players < 2 || total_players > 5
   puts "How many players will be playing today?".blue
   print ">".blue
-  total_players = gets.chomp.to_i
-  unless total_players > 1 && total_players < 6
-    puts "Please pick a number between 2 and 5".red 
+  begin
+    total_players = get_number
+    unless total_players > 1 && total_players < 6
+      puts "Please pick a number between 2 and 5".red
+    end
+  rescue QuitGame
+    QuitGame.quit
   end
 end
 
@@ -77,9 +103,14 @@ while(!game_over)
     while(card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size)
       puts "\nWhich card would you like to play?".blue
       print ">".blue
-      card_to_play = gets.chomp.to_i
-      if card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size
-        puts "⛔️ Invalid selection ⛔️".red
+      begin
+        card_to_play = get_number
+
+        if card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size
+          puts "⛔️ Invalid selection ⛔️".red
+        end
+      rescue QuitGame
+        QuitGame.quit
       end
     end
     
