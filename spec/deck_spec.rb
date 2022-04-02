@@ -22,7 +22,7 @@ RSpec.describe Deck do
     }
 
     context "empty cards" do
-      described_class::HAND_SIZE_HASH.each do |k, v|
+      described_class::HAND_SIZE.each do |k, v|
         context "when there are #{k} players" do
           it "reduces the deck by #{k * v}" do
             expect {

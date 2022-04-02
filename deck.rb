@@ -16,7 +16,7 @@ class Deck
     chopsticks: 4
   }
 
-  HAND_SIZE_HASH = {
+  HAND_SIZE = {
     2 => 10,
     3 => 9,
     4 => 8,
@@ -43,7 +43,7 @@ class Deck
   end
 
   def deal_cards(players)
-    HAND_SIZE_HASH[players.size].times do
+    HAND_SIZE[players.size].times do
       players.each do |player|
         player.hand << cards.pop
       end
