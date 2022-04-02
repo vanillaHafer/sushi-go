@@ -310,19 +310,104 @@ RSpec.describe Player do
 
   describe "#update_maki_points" do
     context "when there is one first place winner" do
-      it "awards 6 points" do
-        players = [
+      let(:players) do
+        [
           create(:player, :maki_3),
           create(:player, :maki_1),
-          create(:player, :maki_2),
+          create(:player, :maki_1),
           create(:player, :maki_2)
         ]
+      end
+
+      it "awards 6 points" do
         expect {
           Player.update_maki_points(players)
         }.to change {
           players.first.maki_points[0]
         }.from(nil)
           .to(6)
+      end
+
+      it "awards 3 points to second" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          players.last.maki_points[0]
+        }.from(nil)
+          .to(3)
+      end
+    end
+
+    context "when there is two-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_1),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 1 point" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil])
+          .to([1, 1])
+      end
+    end
+
+    context "when there is three-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 1 point" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[1].maki_points[0],
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil, nil])
+          .to([1, 1, 1])
+      end
+    end
+
+    context "when there is a four-way tie for second place" do
+      let(:players) do
+        [
+          create(:player, :maki_3),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2),
+          create(:player, :maki_2)
+        ]
+      end
+
+      it "gives each second place 0 points" do
+        expect {
+          Player.update_maki_points(players)
+        }.to change {
+          [
+            players[1].maki_points[0],
+            players[2].maki_points[0],
+            players[3].maki_points[0],
+            players[4].maki_points[0]
+          ]
+        }.from([nil, nil, nil, nil])
+          .to([0, 0, 0, 0])
       end
     end
 

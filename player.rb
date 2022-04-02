@@ -160,13 +160,19 @@ class Player
       end
 
       # Award points for first place winners
-      first_place_indices.each do |index|
-        players[index].maki_points[plate] = FIRST_PLACE_MAKI_POINTS / first_place_indices.size
+      if !first_place_indices.empty?
+        points = FIRST_PLACE_MAKI_POINTS / first_place_indices.size
+        first_place_indices.each do |index|
+          players[index].maki_points[plate] = points
+        end
       end
 
       # Award points for second place winners (Award 1 point minimum in the case of a 4+ way tie)
-      second_place_indices.each do |index|
-        players[index].maki_points[plate] = SECOND_PLACE_MAKI_POINTS / second_place_indices.size > 1 ? SECOND_PLACE_MAKI_POINTS / second_place_indices.size : 1
+      if !second_place_indices.empty?
+        points = SECOND_PLACE_MAKI_POINTS / second_place_indices.size
+        second_place_indices.each do |index|
+          players[index].maki_points[plate] = points
+        end
       end
     end
   end
