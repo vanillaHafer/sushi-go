@@ -73,10 +73,6 @@ class Player
     end
   end
 
-  def current_plate
-    plate.map(&:name)
-  end
-
   def current_hand
     hand.map(&:name)
   end
