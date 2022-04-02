@@ -35,22 +35,22 @@ class Player
     maki_roll_count = 0
 
     plate[plate_number].each do |card|
-      if card.name.include?("Nigiri")
+      if card.nigiri?
         if wasabi_count > 0
           value += card.value * 3
           wasabi_count -= 1
         else
           value += card.value
         end
-      elsif card.name == "Tempura"
+      elsif card.tempura?
         tempura_count += 1
-      elsif card.name == "Sashimi"
+      elsif card.sashimi?
         sashimi_count += 1
-      elsif card.name == "Dumpling"
+      elsif card.dumpling?
         dumpling_count += 1
-      elsif card.name == "Wasabi"
+      elsif card.wasabi?
         wasabi_count += 1
-      elsif card.name.include?("Maki")
+      elsif card.maki?
         maki_roll_count += 1
       end
     end

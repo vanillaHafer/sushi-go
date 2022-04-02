@@ -11,6 +11,10 @@ class Card
     end
   end
 
+  def nigiri?
+    name.downcase.include?("nigiri")
+  end
+
   def initialize(card_name:, value: 0, maki_value: 0)
     @value = value
     @card_name = card_name
