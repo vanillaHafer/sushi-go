@@ -82,13 +82,15 @@ class Player
   end
 
   def self.update_players(players, current_round)
+    round_idx = current_round - 1
     players.size.times do |player_number|
-      players[player_number].maki_rolls[current_round -1] = 0
-      players[player_number].plate[current_round - 1].each do |item| 
-        players[player_number].maki_rolls[current_round -1] += 1 if item.card_name.include?("Maki (*)")
-        players[player_number].maki_rolls[current_round -1] += 2 if item.card_name.include?("Maki (**)")
-        players[player_number].maki_rolls[current_round -1] += 3 if item.card_name.include?("Maki (***)")
-        players[player_number].puddings += 1 if item.card_name.include?("Pudding")
+      players[player_number].maki_rolls[round_idx] = 0
+      players[player_number].plate[round_idx].each do |card|
+        if card.maki?
+          players[player_number].maki_rolls[round_idx] += card.maki_value
+        end
+
+        players[player_number].puddings += 1 if card.name.include?("Pudding")
       end
     end
   end
