@@ -138,4 +138,19 @@ RSpec.describe Player do
       end
     end
   end
+
+  describe "#total_value_of_all_plates" do
+    let(:plate) do
+      [
+        [Card.new(card_name: "Nigiri", value: 6)],
+        [Card.new(card_name: "Nigiri", value: 6)],
+        [Card.new(card_name: "Nigiri", value: 6)]
+      ]
+    end
+    let(:player) { Player.new.tap { |p| p.plate = plate } }
+
+    it "sums the plate sizes" do
+      expect(player.total_value_of_all_plates).to eq(18)
+    end
+  end
 end
