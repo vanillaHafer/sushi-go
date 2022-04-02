@@ -177,5 +177,20 @@ RSpec.describe Player do
       }.from(nil)
         .to(3)
     end
+
+    it "adds the pudding for the round" do
+      player_1.plate[round - 1] = [
+        Card.new(card_name: "Pudding"),
+        Card.new(card_name: "Maki"),
+        Card.new(card_name: "Pudding")
+      ]
+
+      expect {
+        Player.update_players(players, round)
+      }.to change {
+        player_1.puddings
+      }.from(0)
+        .to(2)
+    end
   end
 end

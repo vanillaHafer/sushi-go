@@ -12,7 +12,9 @@ class Card
     end
   end
 
-  def maki?
-    name.start_with?("Maki")
+  %w[Maki Pudding].each do |n|
+    define_method(:"#{n.downcase}?") do
+      name.start_with?(n)
+    end
   end
 end
