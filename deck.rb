@@ -26,20 +26,20 @@ class Deck
   def initialize
     self.cards = []
 
-    CARD_COUNT[:wasabi].times {self.cards << Card.new(card_name: "Wasabi")}
-    CARD_COUNT[:egg_nigiri].times {self.cards << Card.new(card_name: "Egg Nigiri", value: 1)}
-    CARD_COUNT[:salmon_nigiri].times {self.cards << Card.new(card_name: "Salmon Nigiri", value: 2)}
-    CARD_COUNT[:squid_nigiri].times {self.cards << Card.new(card_name: "Squid Nigiri", value: 3)}
-    CARD_COUNT[:tempura].times {self.cards << Card.new(card_name: "Tempura")}
-    CARD_COUNT[:sashimi].times {self.cards << Card.new(card_name: "Sashimi")}
-    CARD_COUNT[:dumpling].times {self.cards << Card.new(card_name: "Dumpling")}
-    CARD_COUNT[:maki_1].times {self.cards << Card.new(card_name: "Maki(*)", maki_value: 1)}
-    CARD_COUNT[:maki_2].times {self.cards << Card.new(card_name: "Maki(**)", maki_value: 2)}
-    CARD_COUNT[:maki_3].times {self.cards << Card.new(card_name: "Maki(***)", maki_value: 3)}
-    CARD_COUNT[:pudding].times {self.cards << Card.new(card_name: "Pudding")}
-    CARD_COUNT[:chopsticks].times {self.cards << Card.new(card_name: "Chopsticks")}
+    CARD_COUNT[:wasabi].times { cards << Card.new(card_name: "Wasabi") }
+    CARD_COUNT[:egg_nigiri].times { cards << Card.new(card_name: "Egg Nigiri", value: 1) }
+    CARD_COUNT[:salmon_nigiri].times { cards << Card.new(card_name: "Salmon Nigiri", value: 2) }
+    CARD_COUNT[:squid_nigiri].times { cards << Card.new(card_name: "Squid Nigiri", value: 3) }
+    CARD_COUNT[:tempura].times { cards << Card.new(card_name: "Tempura") }
+    CARD_COUNT[:sashimi].times { cards << Card.new(card_name: "Sashimi") }
+    CARD_COUNT[:dumpling].times { cards << Card.new(card_name: "Dumpling") }
+    CARD_COUNT[:maki_1].times { cards << Card.new(card_name: "Maki(*)", maki_value: 1) }
+    CARD_COUNT[:maki_2].times { cards << Card.new(card_name: "Maki(**)", maki_value: 2) }
+    CARD_COUNT[:maki_3].times { cards << Card.new(card_name: "Maki(***)", maki_value: 3) }
+    CARD_COUNT[:pudding].times { cards << Card.new(card_name: "Pudding") }
+    CARD_COUNT[:chopsticks].times { cards << Card.new(card_name: "Chopsticks") }
 
-    self.cards.shuffle!
+    cards.shuffle!
   end
 
   def deal_cards(players)
