@@ -327,14 +327,16 @@ RSpec.describe Player do
     end
 
     context "when there are two first place winners" do
-      it "awards 3 points to each one" do
-        players = [
+      let(:players) do
+        [
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_2),
           create(:player, :maki_2)
         ]
+      end
 
+      it "awards 3 points to each one" do
         expect {
           Player.update_maki_points(players)
         }.to change {
@@ -345,17 +347,30 @@ RSpec.describe Player do
         }.from([nil, nil])
           .to([3, 3])
       end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[2].maki_points[0],
+            players[3].maki_points[0]
+          ]
+        }.from([nil, nil])
+      end
     end
 
     context "when there are three first place winners" do
-      it "awards 2 points to each one" do
-        players = [
+      let(:players) do
+        [
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_2)
         ]
+      end
 
+      it "awards 2 points to each one" do
         expect {
           Player.update_maki_points(players)
         }.to change {
@@ -367,18 +382,30 @@ RSpec.describe Player do
         }.from([nil, nil, nil])
           .to([2, 2, 2])
       end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[3].maki_points[0]
+          ]
+        }.from([nil])
+      end
     end
 
     context "when there are four first place winners" do
-      it "awards 1 point to each one" do
-        players = [
+      let(:players) do
+        [
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_1)
         ]
+      end
 
+      it "awards 1 point to each one" do
         expect {
           Player.update_maki_points(players)
         }.to change {
@@ -386,11 +413,21 @@ RSpec.describe Player do
         }.from([nil, nil, nil, nil, nil])
           .to([1, 1, 1, 1, nil])
       end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[4].maki_points[0]
+          ]
+        }.from([nil])
+      end
     end
 
     context "when there are five first place winners" do
-      it "awards 1 point to each one" do
-        players = [
+      let(:players) do
+        [
           create(:player, :maki_3),
           create(:player, :maki_3),
           create(:player, :maki_3),
@@ -398,13 +435,25 @@ RSpec.describe Player do
           create(:player, :maki_3),
           create(:player, :maki_1)
         ]
+      end
 
+      it "awards 1 point to each one" do
         expect {
           Player.update_maki_points(players)
         }.to change {
           players.map { |pl| pl.maki_points[0] }
         }.from([nil, nil, nil, nil, nil, nil])
           .to([1, 1, 1, 1, 1, nil])
+      end
+
+      it "does not award second place" do
+        expect {
+          Player.update_maki_points(players)
+        }.not_to change {
+          [
+            players[5].maki_points[0]
+          ]
+        }.from([nil])
       end
     end
   end
