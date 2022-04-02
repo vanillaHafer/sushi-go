@@ -52,7 +52,7 @@ class Player
       end
     end
 
-    value += maki_points[plate_number] unless maki_points[plate_number].nil?
+    value += maki_points[plate_number].to_i
 
     value += TEMPURA_POINTS * (tempura_count / TEMPURA_NEEDED)
     value += SASHIMI_POINTS * (sashimi_count / SASHIMI_NEEDED)
