@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.1"
+ruby "3.1.0"
 
 gem "colorize", "~> 0.8.1"
 gem "pry", "~> 0.14.1"

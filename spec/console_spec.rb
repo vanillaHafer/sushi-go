@@ -31,18 +31,20 @@ RSpec.describe Console do
         * Player Plates *
         *****************
         
-        ************   ************   
-        *   (0)    *   *   (0)    *   
-        * Player 1 *   * Player 2 *   
-        ************   ************   
-        Score: 0       Score: 0       
+        ******************   ******************   
+        *      (0)       *   *      (0)       *   
+        *    Player 1    *   *    Player 2    *   
+        ******************   ******************   
+        Score: 0             Score: 0             
 
-        Score: 0       Score: 0       
+        Score: 0             Score: 0             
 
-        Score: 0       Score: 0       
+        Score: 0             Score: 0             
 
 
-        Score: 0       Score: 0       
+        Score: 0             Score: 0             
+        Pudding: -3          Pudding: -3          
+        FinalScore: -3       FinalScore: -3       
 
       OUT
     end

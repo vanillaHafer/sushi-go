@@ -62,10 +62,9 @@ class Player
   end
 
   def total_value_of_all_plates
-    total_value = plate.each_index.sum do |index|
+    plate.each_index.sum do |index|
       plate_value(index)
     end
-    total_value
   end
 
   def current_hand
