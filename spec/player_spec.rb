@@ -312,11 +312,11 @@ RSpec.describe Player do
     context "when there is one first place winner" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 2),
-          create(:player, :pudding, puddings: 2),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 2),
+          create(:player, puddings: 2),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -342,11 +342,11 @@ RSpec.describe Player do
     context "when there is two-way tie for first place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 3),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -375,11 +375,11 @@ RSpec.describe Player do
     context "when there is three-way tie for first place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -409,11 +409,11 @@ RSpec.describe Player do
     context "when there is a four-way tie for first place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -444,11 +444,11 @@ RSpec.describe Player do
     context "when there is a five-way tie for first place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 4)
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4),
+          create(:player, puddings: 4)
         ]
       end
 
@@ -471,8 +471,8 @@ RSpec.describe Player do
       context "and one first place winner" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 4),
-            create(:player, :pudding, puddings: 3)
+            create(:player, puddings: 4),
+            create(:player, puddings: 3)
           ]
         end
         it "awards 6 points to first place" do
@@ -496,8 +496,8 @@ RSpec.describe Player do
       context "and there is a tie for first place" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 3),
-            create(:player, :pudding, puddings: 3)
+            create(:player, puddings: 3),
+            create(:player, puddings: 3)
           ]
         end
 
@@ -517,11 +517,11 @@ RSpec.describe Player do
     context "when there is one last place winner" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 2),
-          create(:player, :pudding, puddings: 2),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 2),
+          create(:player, puddings: 2),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -547,11 +547,11 @@ RSpec.describe Player do
     context "when there is two-way tie for last place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 2),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 2),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -580,11 +580,11 @@ RSpec.describe Player do
     context "when there is three-way tie for last place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 3),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 3),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -614,11 +614,11 @@ RSpec.describe Player do
     context "when there is a four-way tie for last place" do
       let(:players) do
         [
-          create(:player, :pudding, puddings: 4),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1),
-          create(:player, :pudding, puddings: 1)
+          create(:player, puddings: 4),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1),
+          create(:player, puddings: 1)
         ]
       end
 
@@ -650,8 +650,8 @@ RSpec.describe Player do
       context "in a two player game" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1)
+            create(:player, puddings: 1),
+            create(:player, puddings: 1)
           ]
         end
 
@@ -670,9 +670,9 @@ RSpec.describe Player do
       context "in a three player game" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1)
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1)
           ]
         end
 
@@ -693,10 +693,10 @@ RSpec.describe Player do
       context "in a four player game" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1)
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1)
           ]
         end
 
@@ -717,11 +717,11 @@ RSpec.describe Player do
       context "in a five player game" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1)
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1)
           ]
         end
 
@@ -745,10 +745,10 @@ RSpec.describe Player do
       context "in a 4 player game" do
         let(:players) do
           [
-            create(:player, :pudding, puddings: 4),
-            create(:player, :pudding, puddings: 4),
-            create(:player, :pudding, puddings: 1),
-            create(:player, :pudding, puddings: 1)
+            create(:player, puddings: 4),
+            create(:player, puddings: 4),
+            create(:player, puddings: 1),
+            create(:player, puddings: 1)
           ]
         end
 
@@ -782,11 +782,11 @@ RSpec.describe Player do
         context "with 2 winners and 2 losers" do
           let(:players) do
             [
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 1),
-              create(:player, :pudding, puddings: 0),
-              create(:player, :pudding, puddings: 0)
+              create(:player, puddings: 4),
+              create(:player, puddings: 4),
+              create(:player, puddings: 1),
+              create(:player, puddings: 0),
+              create(:player, puddings: 0)
             ]
           end
 
@@ -826,11 +826,11 @@ RSpec.describe Player do
         context "with 3 winners and 2 losers" do
           let(:players) do
             [
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 0),
-              create(:player, :pudding, puddings: 0)
+              create(:player, puddings: 4),
+              create(:player, puddings: 4),
+              create(:player, puddings: 4),
+              create(:player, puddings: 0),
+              create(:player, puddings: 0)
             ]
           end
 
@@ -863,11 +863,11 @@ RSpec.describe Player do
         context "with 2 winners and 3 losers" do
           let(:players) do
             [
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 4),
-              create(:player, :pudding, puddings: 0),
-              create(:player, :pudding, puddings: 0),
-              create(:player, :pudding, puddings: 0)
+              create(:player, puddings: 4),
+              create(:player, puddings: 4),
+              create(:player, puddings: 0),
+              create(:player, puddings: 0),
+              create(:player, puddings: 0)
             ]
           end
 
