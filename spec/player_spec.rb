@@ -308,7 +308,7 @@ RSpec.describe Player do
     end
   end
 
-  describe "#update_pudding_score" do
+  describe ".update_pudding_score" do
     context "when there is one first place winner" do
       let(:players) do
         [
@@ -900,7 +900,7 @@ RSpec.describe Player do
     end
   end
 
-  describe "#update_maki_points" do
+  describe ".update_maki_points" do
     context "when there is one first place winner" do
       let(:players) do
         [
