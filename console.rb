@@ -23,14 +23,21 @@ class Console
       puts "\n"
 
       players.size.times do |player_number|
+        print "Pudding: "
         if(players[player_number].pudding_score > 0)
-          print "Pudding: #{players[player_number].pudding_score}".ljust(21).light_green
+          print "+#{players[player_number].pudding_score}".ljust(12).light_green
         elsif(players[player_number].pudding_score == 0)
-          print "Pudding: #{players[player_number].pudding_score}".ljust(21)
+          print "#{players[player_number].pudding_score}".ljust(12)
         elsif(players[player_number].pudding_score < 0)
-          print "Pudding: #{players[player_number].pudding_score}".ljust(21).red
+          print "#{players[player_number].pudding_score}".ljust(12).red.bold
         end
       end
+      puts "\n"
+
+      players.size.times do |player_number|
+        print "--------------".ljust(21, " ").white
+      end
+
       puts "\n"
       
       players.size.times do |player_number|

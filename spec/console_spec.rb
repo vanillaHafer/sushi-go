@@ -44,6 +44,7 @@ RSpec.describe Console do
 
         Score: 0             Score: 0             
         Pudding: 0           Pudding: 0           
+        --------------       --------------       
         FinalScore: 0        FinalScore: 0        
 
       OUT
