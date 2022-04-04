@@ -1134,4 +1134,36 @@ RSpec.describe Player do
       end
     end
   end
+
+  describe "#chopsticks_in_plate?" do
+    let(:player_1) do
+      create(:player)
+    end
+
+    let(:player_2) do
+      create(:player, :chopsticks_1)
+    end
+
+    let(:player_3) do
+      create(:player, :chopsticks_2)
+    end
+    
+    context "when there are no chopsticks cards in your plate" do
+      it "returns false" do
+        expect(player_1.chopsticks_in_plate?(0)).to eq(false)
+      end
+    end
+
+    context "when there is 1 chopsticks card in your plate" do
+      it "returns true" do
+        expect(player_2.chopsticks_in_plate?(0)).to eq(true)
+      end
+    end
+
+    context "when there are 2 chopsticks cards in your plate" do
+      it "returns true" do
+        expect(player_3.chopsticks_in_plate?(0)).to eq(true)
+      end
+    end
+  end
 end

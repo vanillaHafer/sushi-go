@@ -71,6 +71,10 @@ class Player
     hand.map(&:name)
   end
 
+  def chopsticks_in_plate?(plate_number)
+    plate[plate_number].map(&:card_name).include?("Chopsticks")
+  end
+
   def self.update_players(players, current_round)
     round_idx = current_round - 1
     players.size.times do |player_number|
