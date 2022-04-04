@@ -104,16 +104,21 @@ class Player
     end
 
     # Check for last place
-    players.size.times do |player_number|
-      if players[player_number].puddings <= last_place_amount
-        if players[player_number].puddings == last_place_amount
-          last_place_indices << player_number
-        else
-          last_place_indices = [player_number]
+    if(players.size != 2)
+      players.size.times do |player_number|
+        if players[player_number].puddings <= last_place_amount && !first_place_indices.include?(player_number)
+          if players[player_number].puddings == last_place_amount
+            last_place_indices << player_number
+          else
+            last_place_indices = [player_number]
+          end
+          last_place_amount = players[player_number].puddings
         end
-        last_place_amount = players[player_number].puddings
       end
     end
+    
+    # If all players have the same amount of pudding cards played, no points are scored
+    first_place_indices = [] if(first_place_indices.size == players.size)
 
     first_place_indices.each do |index|
       players[index].pudding_score = 6 / first_place_indices.size

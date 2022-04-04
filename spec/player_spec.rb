@@ -308,6 +308,598 @@ RSpec.describe Player do
     end
   end
 
+  describe "#update_pudding_score" do
+    context "when there is one first place winner" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 2),
+          create(:player, :pudding, puddings: 2),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "awards 6 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.first.pudding_score
+        }.from(0)
+          .to(6)
+      end
+
+      it "remove 6 points from last" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.last.pudding_score
+        }.from(0)
+          .to(-6)
+      end
+    end
+
+    context "when there is two-way tie for first place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives each first placer 3 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[0].pudding_score,
+            players[1].pudding_score
+          ]
+        }.from([0, 0])
+          .to([3, 3])
+      end
+
+      it "remove 6 points from last" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.last.pudding_score
+        }.from(0)
+          .to(-6)
+      end
+    end
+
+    context "when there is three-way tie for first place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives each first placer 2 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[0].pudding_score,
+            players[1].pudding_score,
+            players[2].pudding_score
+          ]
+        }.from([0, 0, 0])
+          .to([2, 2, 2])
+      end
+
+      it "remove 6 points from last" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.last.pudding_score
+        }.from(0)
+          .to(-6)
+      end
+    end
+
+    context "when there is a four-way tie for first place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives each first placer 1 point" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[0].pudding_score,
+            players[1].pudding_score,
+            players[2].pudding_score,
+            players[3].pudding_score
+          ]
+        }.from([0, 0, 0, 0])
+          .to([1, 1, 1, 1])
+      end
+
+      it "remove 6 points from last" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.last.pudding_score
+        }.from(0)
+          .to(-6)
+      end
+    end
+
+    context "when there is a five-way tie for first place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 4)
+        ]
+      end
+
+      it "no puddings are awarded" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to_not change {
+          [
+            players[0].pudding_score,
+            players[1].pudding_score,
+            players[2].pudding_score,
+            players[3].pudding_score,
+            players[4].pudding_score
+          ]
+        }
+      end
+    end
+
+    context "when there are only 2 players" do
+      context "and one first place winner" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 4),
+            create(:player, :pudding, puddings: 3)
+          ]
+        end
+        it "awards 6 points to first place" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to change {
+            players.first.pudding_score
+          }.from(0)
+          .to(6)
+        end
+        
+        it "not remove any points from the other player" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to_not change {
+            players.last.pudding_score
+          }
+        end
+      end
+
+      context "and there is a tie for first place" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 3),
+            create(:player, :pudding, puddings: 3)
+          ]
+        end
+
+        it "no points are awarded" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to_not change {
+            [
+              players[0].pudding_score,
+              players[1].pudding_score
+            ]
+          }
+        end
+      end
+    end
+
+    context "when there is one last place winner" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 2),
+          create(:player, :pudding, puddings: 2),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "awards 6 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.first.pudding_score
+        }.from(0)
+          .to(6)
+      end
+
+      it "remove 6 points from last" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players.last.pudding_score
+        }.from(0)
+          .to(-6)
+      end
+    end
+
+    context "when there is two-way tie for last place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 2),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives first place 6 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players[0].pudding_score
+        }.from(0)
+          .to(6)
+      end
+
+      it "remove 3 points from last placers" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[3].pudding_score,
+            players[4].pudding_score,
+          ]
+        }.from([0,0])
+          .to([-3,-3])
+      end
+    end
+
+    context "when there is three-way tie for last place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 3),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives first place 6 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players[0].pudding_score
+        }.from(0)
+          .to(6)
+      end
+
+      it "remove 2 points from the last placers" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[2].pudding_score,
+            players[3].pudding_score,
+            players[4].pudding_score,
+          ]
+        }.from([0,0,0])
+          .to([-2,-2,-2])
+      end
+    end
+
+    context "when there is a four-way tie for last place" do
+      let(:players) do
+        [
+          create(:player, :pudding, puddings: 4),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1),
+          create(:player, :pudding, puddings: 1)
+        ]
+      end
+
+      it "gives first place 6 points" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          players[0].pudding_score
+        }.from(0)
+          .to(6)
+      end
+
+      it "remove 1 points from last placers" do
+        expect {
+          Player.update_pudding_score(players)
+        }.to change {
+          [
+            players[1].pudding_score,
+            players[2].pudding_score,
+            players[3].pudding_score,
+            players[4].pudding_score,
+          ]
+        }.from([0,0,0,0])
+          .to([-1,-1,-1,-1])
+      end
+    end
+
+    context "when all players have the same amount of pudding" do
+      context "in a two player game" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1)
+          ]
+        end
+
+        it "awards no points to anyone" do
+          expect{
+            Player.update_pudding_score(players) 
+          }.to_not change {
+            [
+              players[0].pudding_score,
+              players[1].pudding_score
+            ]
+          }
+        end
+      end
+
+      context "in a three player game" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1)
+          ]
+        end
+
+        it "awards no points to anyone" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to_not change {
+            [
+              players[0],
+              players[1],
+              players[2]
+            ]
+          }
+        end
+        
+      end
+
+      context "in a four player game" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1)
+          ]
+        end
+
+        it "awards no points to anyone" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to_not change {
+            [
+              players[0].pudding_score,
+              players[1].pudding_score,
+              players[2].pudding_score,
+              players[3].pudding_score,
+            ]
+          }
+        end
+      end
+
+      context "in a five player game" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1)
+          ]
+        end
+
+        it "awards no points to anyone" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to_not change {
+            [
+              players[0].pudding_score,
+              players[1].pudding_score,
+              players[2].pudding_score,
+              players[3].pudding_score,
+              players[4].pudding_score,
+            ]
+          }
+        end
+      end
+    end
+
+    context "when multiple players tie for first and multiple players tie for last" do
+      context "in a 4 player game" do
+        let(:players) do
+          [
+            create(:player, :pudding, puddings: 4),
+            create(:player, :pudding, puddings: 4),
+            create(:player, :pudding, puddings: 1),
+            create(:player, :pudding, puddings: 1)
+          ]
+        end
+
+        it "awards 3 points to the first placers" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to change {
+            [
+              players[0].pudding_score,
+              players[1].pudding_score
+            ]
+          }.from([0,0])
+          .to([3,3])
+        end
+
+        it "removes 3 points from the last placers" do
+          expect {
+            Player.update_pudding_score(players)
+          }.to change {
+            [
+              players[2].pudding_score,
+              players[3].pudding_score
+            ]
+          }.from([0,0])
+          .to([-3,-3])
+        end
+      end
+
+      context "in a 5 player game" do
+
+        context "with 2 winners and 2 losers" do
+          let(:players) do
+            [
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 1),
+              create(:player, :pudding, puddings: 0),
+              create(:player, :pudding, puddings: 0)
+            ]
+          end
+
+          it "adds 3 points to the winners" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[0].pudding_score,
+                players[1].pudding_score
+              ]
+            }.from([0,0])
+            .to([3,3])
+          end
+
+          it "does not change the middle players pudding score" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to_not change {
+              players[2].pudding_score
+            }
+          end
+
+          it "removes 3 points from the losers" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[3].pudding_score,
+                players[4].pudding_score
+              ]
+            }.from([0,0])
+            .to([-3,-3])
+          end
+        end
+
+        context "with 3 winners and 2 losers" do
+          let(:players) do
+            [
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 0),
+              create(:player, :pudding, puddings: 0)
+            ]
+          end
+
+          it "adds 2 points to the winners" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[0].pudding_score,
+                players[1].pudding_score,
+                players[2].pudding_score
+              ]
+            }.from([0,0,0])
+            .to([2,2,2])
+          end
+
+          it "removes 3 points from the losers" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[3].pudding_score,
+                players[4].pudding_score
+              ]
+            }.from([0,0])
+            .to([-3,-3])
+          end
+        end
+
+        context "with 2 winners and 3 losers" do
+          let(:players) do
+            [
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 4),
+              create(:player, :pudding, puddings: 0),
+              create(:player, :pudding, puddings: 0),
+              create(:player, :pudding, puddings: 0)
+            ]
+          end
+
+          it "adds 3 points to the winners" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[0].pudding_score,
+                players[1].pudding_score
+              ]
+            }.from([0,0])
+            .to([3,3])
+          end
+
+          it "removes 2 points from the losers" do
+            expect {
+              Player.update_pudding_score(players)
+            }.to change {
+              [
+                players[2].pudding_score,
+                players[3].pudding_score,
+                players[4].pudding_score
+              ]
+            }.from([0,0,0])
+            .to([-2,-2,-2])
+          end
+        end
+      end
+    end
+  end
+
   describe "#update_maki_points" do
     context "when there is one first place winner" do
       let(:players) do

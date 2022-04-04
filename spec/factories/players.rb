@@ -6,6 +6,9 @@ FactoryBot.define do
       trait :"maki_#{i}" do
         maki_rolls { [i, 0, 0] }
       end
+      trait :pudding do
+        puddings = 0
+      end
     end
   end
 end
