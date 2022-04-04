@@ -39,6 +39,12 @@ def get_number(quit: %w[q quit done])
   input.to_i
 end
 
+def get_confirmation(quit: %w[q quit done])
+  input = gets&.chomp
+  raise QuitGame if input.nil? || quit.include?(input)
+  input
+end
+
 # Get input of how many players are playing
 while total_players < 2 || total_players > 5
   puts "How many players will be playing today?".blue
@@ -75,6 +81,7 @@ while(!game_over)
     # Clear the screen of any previous turn garbage
     IO.console.clear_screen
 
+    # Handle a new round
     if(current_round != prev_round)
       # Deal more cards to the players
       deck.deal_cards(players)
@@ -96,6 +103,57 @@ while(!game_over)
     # Print a display of the users hand
     Console.print_my_hand(players[0].current_hand)
     
+    # If there is a chopstick in the user's plate, ask if they want to pick it up and play down an extra card
+    if(players[0].chopsticks_in_plate?(current_round.pred))
+
+      confirmation = ""
+
+      while confirmation.downcase[0] != "y" && confirmation.downcase[0] != 'n'
+        puts "\nWould you like to pick up your chopsticks and play an extra card this round? (y/n)".white.on_red
+        print ">".white.on_red
+        begin
+          confirmation = get_confirmation
+          unless confirmation.downcase[0] == "y" || confirmation.downcase[0] == "n"
+            puts "Please enter yes or no".red
+          end
+        rescue QuitGame
+          QuitGame.quit
+        end
+      end
+
+      if confirmation.downcase[0] == "y"
+
+        chopstick_index = players[0].plate[current_round.pred].map(&:card_name).index("Chopsticks")
+
+        # Move the card from your plate to your hand
+        players[0].hand << players[0].plate[current_round.pred].delete_at(chopstick_index)
+
+        # Card the user will play from their hand
+        card_to_play = 0
+        
+        # Get input from the user on which card they want to play
+        while(card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size)
+          puts "\nWhich card would you like to play in place of the chopsticks?".blue
+          print ">".blue
+          begin
+            card_to_play = get_number
+    
+            if card_to_play - 1 < 0 || card_to_play > players[0].current_hand.size
+              puts "⛔️ Invalid selection ⛔️".red
+            end
+          rescue QuitGame
+            QuitGame.quit
+          end
+        end
+        
+        # Move the selected card from your hand to your plate
+        players[0].plate[current_round - 1] << players[0].hand.delete_at(card_to_play - 1)
+
+        # Print a display of the users new hand for their next card
+        Console.print_my_hand(players[0].current_hand)
+      end
+    end
+
     # Card the user will play from their hand
     card_to_play = 0
     
