@@ -75,7 +75,7 @@ current_round = 1
 going_clockwise = true
 
 # Main loop
-while(!game_over)
+until(game_over)
   while(current_round <= 3)
 
     # Clear the screen of any previous turn garbage
